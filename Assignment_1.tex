@@ -81,7 +81,7 @@
 
 
 \begin{answerbox}{10em}
-
+The data set is represented by a 50 by 2 pandas data frame. It contains 50 data points and 2 columns for the attributes 'revision\_time' and 'exam\_score'. These attributes are both of the float64 data type. The float values for 'revision\_time' vary from a minimum of 2.72 to a maximum of 48.0. The float values for 'exam\_score' vary from a minimum of 49.9 to a maximum of 94.9. 
 \end{answerbox}
 
 
@@ -103,7 +103,7 @@ For this part, you should use the sklearn implementation of \href{https://scikit
 
 
 \begin{answerbox}{10em}
-Your Answer Here
+The estimated model parameters are $w = [17.9, 1.44]$ to 3 s.f. The values of $w$ represent the estimated weight coefficients for the linear regression model. In this case the first value 17.9 represents the y-intercept of the line and the value of 1.44 represents the coefficient for the 'revision\_time' attribute.  
 \end{answerbox}
 
 
@@ -119,7 +119,7 @@ Your Answer Here
 
 
 \begin{answerbox}{35em}
-Your Answer Here
+\includegraphics[width = 1.0\textwidth]{q1_c.png}
 \end{answerbox}
 
 
@@ -138,7 +138,14 @@ It should only take a few lines (i.e. <5).\\
 
 
 \begin{answerbox}{20em}
-Your Answer Here
+x\_new contains the column of 1's and the column of revision\_time values. The code used to calculate the weights is as follows:
+\begin {verbatim}
+x_new = np.ones((50, 2))
+x_new[:,1] = r_part1['revision_time']
+w = np.dot(x_new.T, x_new)
+w1 = np.dot(np.linalg.pinv(w), np.dot(x_new.T, y))
+print(w1)
+\end {verbatim}
 \end{answerbox}
 
 
@@ -156,7 +163,8 @@ Write out the expression for MSE and list one of its limitations. \\
 
 
 \begin{answerbox}{10em}
-Your Answer Here
+$MSE = \frac{1}{n}\sum\limits_{i=1}^n(y_i-\hat{y_i})^2$ where $n$ is the number of data point instances, $\hat{y_i}$ is the predicted value for instance $i$, and $y_i$ is the ground truth value for instance $i$.
+A limitation of using MSE is that it's sensitive to outliers and gives a lot of weight to them compared to other methods.
 \end{answerbox}
 
 
@@ -175,7 +183,17 @@ Comment on any differences in their performance.
 
 
 \begin{answerbox}{10em}
-Your Answer Here
+Linear regression model results are show below:
+\begin{center}
+\begin{tabular}{c|c}
+ \hline
+ Solution & MSE \\ \hline
+ sklearn & 30.9854726145413 \\
+ closed-form & 30.98547261454128 \\
+ \hline
+\end{tabular}
+\end{center}
+All s.f have been displayed as the sklearn version has rounded up the result whereas the closed-form version hasn't. The performance difference is minimal.
 \end{answerbox}
 
 
@@ -195,7 +213,10 @@ Describe the resulting plot. Where is its minimum? Is this value to be expected?
 
 
 \begin{answerbox}{35em}
-Your Answer Here
+\includegraphics[width = 1\textwidth]{q1_g.png}
+
+The resulting plot shows that as the coefficient $w_1$ increases, the MSE reduces significantly until the minimum point is reached(indicated in blue above). A minimum of $w_1 = 1.35$ is expected as it isn't too far away from 1.44 which was the $w_1$ value the classifier generated from the data set. The reason this $w_1$ value is lower is due to us making the assumption that the y-intercept, $w_0$ is 20. This changes the value of the optimal slope($w_1$) that gets fitted to the model. 
+
 \end{answerbox}
 
 
@@ -235,7 +256,7 @@ Plot the resulting models on the same plot and also include the input data.\\
 
 
 \begin{answerbox}{35em}
-Your Answer Here
+\includegraphics[width = 1\textwidth]{q2.png}
 \end{answerbox}
 
 
@@ -249,7 +270,7 @@ Your Answer Here
 
 
 \begin{answerbox}{35em}
-Your Answer Here
+\includegraphics[width = 1.0\textwidth]{q2_b.png}
 \end{answerbox}
 
 
@@ -265,7 +286,7 @@ Based on these results, which model would you choose?}
 
 
 \begin{answerbox}{15em}
-Your Answer Here
+The $MSE$ for the $M=3$ and $M=4$ regression models both round to 2.74 to 3 s.f. The $M=4$ model has a slightly lower MSE of $2.7389...$ however the difference is negligible so the performance would most likely be similar. There are 2 reasons why I would choose the $M=3$ regression model. The first being that the actual input/output scatter plot was shaped like a cubic and the fit for the $M=3$ classifier was ideal. The second reason being that despite the $M = 4$ model producing a similar fit, there is a chance that picking it would result in the overfitting of future data. A model of a higher degree is more flexible and very sensitive. Picking the $M=3$ model is less likely to cause such an issue, so I think it's the sensible choice.
 \end{answerbox}
 
 
@@ -285,7 +306,8 @@ Comment on the impact of larger or smaller values of $\alpha$.
 
 
 \begin{answerbox}{35em}
-Your Answer Here
+\includegraphics[width = 1.0\textwidth]{q2_d.png}
+Upon observation it can be seen that the lower $\alpha$ is, the further away the predicted outputs are from the ground truth outputs. This is because input points with a distance of more than $\alpha$ from the RBF centre points get mapped further away than points which are within the range of the RBF centre points. When $\alpha$ is large, the points are mapped closer together as more points are within range of the RBF features. Having a large $\alpha$ value evidently helps produce predicted outputs closer to the true label values.
 \end{answerbox}
 
 
@@ -322,7 +344,19 @@ Summarise the main properties of both the training and test splits.
 
 
 \begin{answerbox}{12em}
-Your Answer Here
+\begin{center}
+
+\begin{tabular}{c|c|c|c}
+ \hline
+ Data & Dimensions(row,col) & Type & Contains(per instance) \\ \hline
+ X\_train & 4800, 136 & float64 & 68 pairs of (x,y) face features \\
+ X\_test & 1200, 136 & float64 & 68 pairs of (x,y) face features \\
+ y\_train & 4800, 1 & int64 & 0/1 to show if instance is smiling \\
+ y\_test & 1200, 1 & int64 & 0/1 to show if instance is smiling  \\
+ \hline
+\end{tabular}
+\end{center}
+The training/test split is approximately a 80/20 split. There are 4800 training instances and 1200 test instances.
 \end{answerbox}
 
 
@@ -339,10 +373,13 @@ You can plot both on the same figure, but use different colors for each of the t
 Comment on any difference you notice between the two sets of points. \\
 \hint{Your plot should contain two faces.}
 }
-
+s
 
 \begin{answerbox}{35em}
-Your Answer Here
+\includegraphics[width = 1.0\textwidth]{q3_b.png}
+It can be observed that each pair of smiling $(x,y)$ points are mapped slightly below every $(x,y)$ pair of not smiling points, apart from in the mouth region.
+
+Furthermore, we can see that the smiling $(x,y)$ points in the mouth region span across a larger range of $x$ and $y$ values compared to the not smiling co-ordinates in the mouth region which spans over a smaller range of $x$ and $y$ values. The smiling co-ordinates in this region occupy more space than the not smiling points.
 \end{answerbox}
 
 
@@ -360,7 +397,7 @@ What is the advantage, if any, of using this measure compared to entropy?
 
 
 \begin{answerbox}{10em}
-Your Answer Here
+The DecisionTreeClassifier in sklearn uses the Gini impurity for classification by default. The advantage of using this metric is that it is computationally less expensive than the calculation for entropy as it doesn't involve calculating logs of values. Therefore it would be ideal to use for data sets with many attributes.
 \end{answerbox}
 
 
@@ -377,7 +414,9 @@ What impact does smaller or larger values of this parameter have? Give one poten
 
 
 \begin{answerbox}{10em}
-Your Answer Here
+A samller tree depth would result in less leaves. Therefore, data points are likely to always be classified into the same class. Hence, the model will be inflexible and underfit. A higher depth allows for splits on more attributes, hence increasing the amount of leaves. This allows the pattern in the data to be captured better. However, using a high tree depth could result in the model being overfitted, especially if the tree is grown to full depth as it will fit the training data perfectly. Furthermore, it is computationally expensive when random forests are used.
+
+
 \end{answerbox}
 
 
@@ -397,7 +436,18 @@ You can set the maximum depth of the decision tree using the \texttt{max\_depth}
 
 
 \begin{answerbox}{20em}
-Your Answer Here
+\begin{center}
+
+\begin{tabular}{c|c|c|c}
+ \hline
+ Model & Maximum Depth & Training Accuracy(3s.f.) & Test Accuracy(3s.f.)  \\ \hline
+ 1 & 2 & 79.5\% & 78.2\%  \\
+ 2 & 8 & 93.4\% &  84.1\% \\
+ 3 & 20 & 100\% & 81.6\%  \\
+ \hline
+\end{tabular}
+\end{center}
+From the results obtained, it can be concluded that model 2 is the best. This is because it obtains a high testing accuracy whilst at the same time not overfitting. Model 3 is overfit as the testing accuracy is less than model 2's despite the 100\% training accuracy.  Model 1 is clearly underfit compared to model 2 as the train and test accuracies are both lower.
 \end{answerbox}
 
 
@@ -415,7 +465,18 @@ Does the one with the highest importance make sense in the context of this class
 
 
 \begin{answerbox}{10em}
-Your Answer Here
+\begin{center}
+
+\begin{tabular}{c|c|c}
+ \hline
+ Order of Importance & Name of Attribute & Gini importance(3s.f.)  \\ \hline
+ 1 & $x_50$ & 0.330  \\
+ 2 & $y_48$ & 0.0900 \\
+ 3 & $y_29$ & 0.0883  \\
+ \hline
+\end{tabular}
+\end{center}
+The $x_{50}$ attribute makes sense to be the most important as when a plot is created for the training $(x_{50},y_{50})$ instances, the points are all centered in the mouth region.
 \end{answerbox}
 
 
@@ -432,7 +493,7 @@ Are there any limitations of the current choice of input attributes used i.e. 2D
 
 
 \begin{answerbox}{10em}
-Your Answer Here
+There are limitations to using 2D attributes. The main one being that coordinates are continuous variables and can take on an infinite amount of values. Decision trees are known to be very sensitive to changes in input data. If input data is changed sightly, a whole different tree can form. The likelihood of this occurring can be reduced by using attributes which take on a fixed number of values.
 \end{answerbox}
 
 
@@ -468,7 +529,18 @@ What, if any, are the limitations of the above method for computing accuracy and
 
 
 \begin{answerbox}{15em}
-Your Answer Here
+\begin{center}
+\begin{tabular}{c|c}
+ \hline
+ Classifier & Accuracy  \\ \hline
+ alg\_1 & 61.6\%  \\
+ alg\_2 & 55\% \\
+ alg\_3 & 32.1\%  \\
+ alg\_4 & 32.9\%  \\
+ \hline
+\end{tabular}
+\end{center}
+According to this metric, alg\_1 is the best model as it has the highest accuracy score. The limitation posed by this metric is that it assumes that the threshold value is optimal. To improve the accuracy, I would test a range of thresholds and select the threshold which optimises the accuracy scores. Alternatively, I would add another threshold in addition to the current one to achieve an improvement.
 \end{answerbox}
 
 
@@ -486,7 +558,19 @@ Does the model with the best AUC also have the best accuracy? If not, why not?\\
 
 
 \begin{answerbox}{15em}
-Your Answer Here
+The following AUC values assume the threshold in the previous question hasn't been applied to binarize the predicted class probabilities.
+\begin{center}
+\begin{tabular}{c|c}
+ \hline
+ Classifier & AUC (3s.f)  \\ \hline
+ alg\_1 & 0.732  \\
+ alg\_2 & 0.632 \\
+ alg\_3 & 0.0640  \\
+ alg\_4 & 0.847  \\
+ \hline
+\end{tabular}
+\end{center}
+We can see alg\_4 has the best AUC but not accuracy. AUC represents the best overall performance, so for a specific threshold, alg\_1 may be more accurate(e.g. when $t \geq 0.5$) but generally most of the time alg\_4 outperforms it.
 \end{answerbox}
 
 
@@ -505,7 +589,9 @@ Is there anything that can be done to improve the performance of \texttt{alg\_3}
 
 
 \begin{answerbox}{35em}
-Your Answer Here
+\includegraphics[width = 1.0\textwidth]{q4_c.png}
+From the graph we can see that alg\_3 has worse than random performance. The only way to improve performance without retraining the model is by reversing the polarity for the outputs. This will effectively flip the ROC curve so it performs better than random.
+
 \end{answerbox}
 
 
